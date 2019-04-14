@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:phone_log/phone_log.dart';
 
+import 'package:audio_recorder/audio_recorder.dart';
+import 'package:permission_handler/permission_handler.dart' as perm;
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -49,6 +52,13 @@ class _MyHomePageState extends State<MyHomePage> {
   String _error = "";
   final PhoneLog phoneLog = new PhoneLog();
   Iterable<CallRecord> _callRecords;
+  Future<void> _requestPermissions() async {
+      print("requesting perms");
+      Map<perm.PermissionGroup, perm.PermissionStatus> _permissions = await perm.PermissionHandler().requestPermissions([perm.PermissionGroup.storage, perm.PermissionGroup.speech, perm.PermissionGroup.phone]);
+      print("perms asked: " + _permissions.toString());
+      PermissionStatus ps = await phoneLog.checkPermission();
+      print("ps: " + ps.toString());
+  }
 
   void _incrementCounter() {
     setState(() {
@@ -87,6 +97,16 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter = entries.length;
       _callRecords = entries;
     });
+  }
+
+  void recordTask() async {
+      bool hasPermissions = await AudioRecorder.hasPermissions;
+      bool isRecording = await AudioRecorder.isRecording;
+
+      await AudioRecorder.start(path: "./audio.aac", audioOutputFormat: AudioOutputFormat.AAC);
+
+      Recording recording = await AudioRecorder.stop();
+      print("path: ${recording.path}, format: ${recording.audioOutputFormat}, duration: ${recording.duration}, extension: ${recording.extension}");
   }
 
   @override
@@ -189,9 +209,19 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Icon(Icons.add),
           ), // This trailing comma makes auto-formatting nicer for build methods.
           FloatingActionButton(
+            onPressed: _requestPermissions,
+            tooltip: 'Request permissions',
+            child: Icon(Icons.add),
+          ), // This trailing comma makes auto-formatting nicer for build methods.
+          FloatingActionButton(
             onPressed: fetchCallLog,
             tooltip: 'Get number of calls',
             child: Icon(Icons.add_call),
+          ), // This trailing comma makes auto-formatting nicer for build methods.
+          FloatingActionButton(
+            onPressed: recordTask,
+            tooltip: 'Record audio',
+            child: Icon(Icons.record_voice_over),
           ), // This trailing comma makes auto-formatting nicer for build methods.
         ],
       ),
