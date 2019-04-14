@@ -84,13 +84,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> fetchCallLog() async {
     PermissionStatus perm = await phoneLog.checkPermission();
-    bool res;
     if (perm != PermissionStatus.granted) {
-      res = await phoneLog.requestPermission();
-    }
-    if (res != true) {
-      print("permission denied");
-      return;
+      print("requesting call log perms");
+      bool permGranted = await phoneLog.requestPermission();
+      if (!permGranted) {
+        print("permission denied");
+        return;
+      }
     }
     Iterable<CallRecord> entries = await phoneLog.getPhoneLogs();
     setState(() {
