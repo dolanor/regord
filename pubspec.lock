@@ -36,6 +36,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.2"
+  fixnum:
+    dependency: transitive
+    description:
+      name: fixnum
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.10.9"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -74,6 +81,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.0"
+  phone_log:
+    dependency: "direct main"
+    description:
+      path: "packages/phone_log"
+      ref: "v1.0.0"
+      resolved-ref: dd88d0f62085d2be5ae190a96a39d52803720926
+      url: "git://github.com/tuxago/flutter.plugins.git"
+    source: git
+    version: "0.0.3"
   quiver:
     dependency: transitive
     description:
