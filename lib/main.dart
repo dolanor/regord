@@ -143,7 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             new Text(call.formattedNumber ?? call.number ?? 'unknow'),
             new Padding(
-              child: new Text(call.callType),
+              child: new Text(call.callType.toString()),
               padding: const EdgeInsets.only(left: 8.0),
             ),
           ],
@@ -183,7 +183,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
-        child: Column(
+        child: ListView(
           // Column is also layout widget. It takes a list of children and
           // arranges them vertically. By default, it sizes itself to fit its
           // children horizontally, and tries to be as tall as its parent.
@@ -198,7 +198,6 @@ class _MyHomePageState extends State<MyHomePage> {
           // center the children vertically; the main axis here is the vertical
           // axis because Columns are vertical (the cross axis would be
           // horizontal).
-          mainAxisAlignment: MainAxisAlignment.start,
           children: children,
         ),
       ),
