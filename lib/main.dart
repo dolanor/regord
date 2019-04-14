@@ -53,11 +53,16 @@ class _MyHomePageState extends State<MyHomePage> {
   final PhoneLog phoneLog = new PhoneLog();
   Iterable<CallRecord> _callRecords;
   Future<void> _requestPermissions() async {
-      print("requesting perms");
-      Map<perm.PermissionGroup, perm.PermissionStatus> _permissions = await perm.PermissionHandler().requestPermissions([perm.PermissionGroup.storage, perm.PermissionGroup.speech, perm.PermissionGroup.phone]);
-      print("perms asked: " + _permissions.toString());
-      PermissionStatus ps = await phoneLog.checkPermission();
-      print("ps: " + ps.toString());
+    print("requesting perms");
+    Map<perm.PermissionGroup, perm.PermissionStatus> _permissions =
+        await perm.PermissionHandler().requestPermissions([
+      perm.PermissionGroup.storage,
+      perm.PermissionGroup.speech,
+      perm.PermissionGroup.phone
+    ]);
+    print("perms asked: " + _permissions.toString());
+    PermissionStatus ps = await phoneLog.checkPermission();
+    print("ps: " + ps.toString());
   }
 
   void _incrementCounter() {
@@ -100,13 +105,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void recordTask() async {
-      bool hasPermissions = await AudioRecorder.hasPermissions;
-      bool isRecording = await AudioRecorder.isRecording;
+    bool hasPermissions = await AudioRecorder.hasPermissions;
+    bool isRecording = await AudioRecorder.isRecording;
 
-      await AudioRecorder.start(path: "./audio.aac", audioOutputFormat: AudioOutputFormat.AAC);
+    await AudioRecorder.start(
+        path: "./audio.aac", audioOutputFormat: AudioOutputFormat.AAC);
 
-      Recording recording = await AudioRecorder.stop();
-      print("path: ${recording.path}, format: ${recording.audioOutputFormat}, duration: ${recording.duration}, extension: ${recording.extension}");
+    Recording recording = await AudioRecorder.stop();
+    print(
+        "path: ${recording.path}, format: ${recording.audioOutputFormat}, duration: ${recording.duration}, extension: ${recording.extension}");
   }
 
   @override
