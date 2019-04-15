@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:phone_log/phone_log.dart';
 
 import 'package:audio_recorder/audio_recorder.dart';
 import 'package:permission_handler/permission_handler.dart' as perm;
+
+import 'package:path_provider/path_provider.dart';
 
 void main() => runApp(MyApp());
 
@@ -106,14 +110,34 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void recordTask() async {
     bool hasPermissions = await AudioRecorder.hasPermissions;
-    bool isRecording = await AudioRecorder.isRecording;
+
+    if(!hasPermissions) {
+        return;
+    }
+    Directory appDir = await getExternalStorageDirectory();
+    String dirPath = appDir.path + "/Android/data/com.tuxago.regord/audio";
+
+    await new Directory(dirPath).create(recursive: true);
 
     await AudioRecorder.start(
-        path: "./audio.aac", audioOutputFormat: AudioOutputFormat.AAC);
+            //TODO create random file names
+        path: dirPath + "/audio.aac",
+        audioOutputFormat: AudioOutputFormat.AAC);
+
+  }
+
+  void stopRecordTask() async{
+    bool hasPermissions = await AudioRecorder.hasPermissions;
+
+    if(!hasPermissions) {
+        return;
+    }
+
 
     Recording recording = await AudioRecorder.stop();
     print(
         "path: ${recording.path}, format: ${recording.audioOutputFormat}, duration: ${recording.duration}, extension: ${recording.extension}");
+
   }
 
   @override
@@ -226,7 +250,12 @@ class _MyHomePageState extends State<MyHomePage> {
           ), // This trailing comma makes auto-formatting nicer for build methods.
           FloatingActionButton(
             onPressed: recordTask,
-            tooltip: 'Record audio',
+            tooltip: 'Record task',
+            child: Icon(Icons.record_voice_over),
+          ), // This trailing comma makes auto-formatting nicer for build methods.
+          FloatingActionButton(
+            onPressed: stopRecordTask,
+            tooltip: 'Stop recording task',
             child: Icon(Icons.record_voice_over),
           ), // This trailing comma makes auto-formatting nicer for build methods.
         ],
