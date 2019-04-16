@@ -52,6 +52,14 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+Future<String> _getAppDir() async {
+  print("getAppDir");
+  Directory dp = await getExternalStorageDirectory();
+
+  print("getAppDir: " + dp.path);
+  return dp.path + "/Android/data/com.tuxago.regord/audio";
+}
+
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   String _error = "";
@@ -117,17 +125,16 @@ class _MyHomePageState extends State<MyHomePage> {
     if (!hasPermissions) {
       return;
     }
-    Directory appDir = await getExternalStorageDirectory();
-    String dirPath = appDir.path + "/Android/data/com.tuxago.regord/audio";
 
-    await new Directory(dirPath).create(recursive: true);
+    String _appDirPath = await _getAppDir();
+    await new Directory(_appDirPath).create(recursive: true);
 
     setState(() {
       _isRecording = true;
     });
 
     await AudioRecorder.start(
-        path: dirPath + "/" + datePrefix() + "task.m4a",
+        path: _appDirPath + "/" + datePrefix() + "task.m4a",
         audioOutputFormat: AudioOutputFormat.AAC);
   }
 
