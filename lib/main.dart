@@ -69,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Iterable<CallRecord> _callRecords;
   bool _isRecording = false;
 
-  Future<void> _requestPermissions() async {
+  void _requestPermissions() async {
     print("requesting perms");
     Map<perm.PermissionGroup, perm.PermissionStatus> _permissions =
         await perm.PermissionHandler().requestPermissions([
@@ -104,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Future<void> fetchCallLog() async {
+  void fetchCallLog() async {
     PermissionStatus perm = await phoneLog.checkPermission();
     if (perm != PermissionStatus.granted) {
       print("requesting call log perms");
