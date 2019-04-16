@@ -72,8 +72,6 @@ class _MyHomePageState extends State<MyHomePage> {
     print("ps: " + ps.toString());
   }
 
-
-
   void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -116,8 +114,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void recordTask() async {
     bool hasPermissions = await AudioRecorder.hasPermissions;
 
-    if(!hasPermissions) {
-        return;
+    if (!hasPermissions) {
+      return;
     }
     Directory appDir = await getExternalStorageDirectory();
     String dirPath = appDir.path + "/Android/data/com.tuxago.regord/audio";
@@ -125,35 +123,33 @@ class _MyHomePageState extends State<MyHomePage> {
     await new Directory(dirPath).create(recursive: true);
 
     setState(() {
-        _isRecording = true;
+      _isRecording = true;
     });
 
     await AudioRecorder.start(
         path: dirPath + "/" + datePrefix() + "task.m4a",
         audioOutputFormat: AudioOutputFormat.AAC);
-
   }
 
   String datePrefix() {
-      DateTime now = DateTime.now();
-      return sprintf("%02d-%02d-%02dT%02d-%02d-%02d_", [now.year, now.month, now.day, now.hour, now.minute, now.second]);
+    DateTime now = DateTime.now();
+    return sprintf("%02d-%02d-%02dT%02d-%02d-%02d_",
+        [now.year, now.month, now.day, now.hour, now.minute, now.second]);
   }
 
-  void stopRecordTask() async{
+  void stopRecordTask() async {
     bool hasPermissions = await AudioRecorder.hasPermissions;
 
-    if(!hasPermissions) {
-        return;
+    if (!hasPermissions) {
+      return;
     }
-
 
     Recording recording = await AudioRecorder.stop();
     print(
         "path: ${recording.path}, format: ${recording.audioOutputFormat}, duration: ${recording.duration}, extension: ${recording.extension}");
     setState(() {
-        _isRecording = false;
+      _isRecording = false;
     });
-
   }
 
   @override
@@ -215,45 +211,45 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     FloatingActionButton recordingTask;
-    if(_isRecording) {
-        recordingTask = FloatingActionButton(
-            onPressed: stopRecordTask,
-            tooltip: 'Stop recording task',
-            child: Icon(Icons.stop),
-          );
+    if (_isRecording) {
+      recordingTask = FloatingActionButton(
+        onPressed: stopRecordTask,
+        tooltip: 'Stop recording task',
+        child: Icon(Icons.stop),
+      );
     } else {
-          recordingTask = FloatingActionButton(
-            onPressed: recordTask,
-            tooltip: 'Record task',
-            child: Icon(Icons.mic),
-          );
+      recordingTask = FloatingActionButton(
+        onPressed: recordTask,
+        tooltip: 'Record task',
+        child: Icon(Icons.mic),
+      );
     }
     Widget floatingActionButton = Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          FloatingActionButton(
-            onPressed: _incrementCounter,
-            tooltip: 'Increment',
-            child: Icon(Icons.add),
-          ), // This trailing comma makes auto-formatting nicer for build methods.
-          FloatingActionButton(
-            onPressed: _decrementCounter,
-            tooltip: 'Decrement',
-            child: Icon(Icons.remove),
-          ), // This trailing comma makes auto-formatting nicer for build methods.
-          FloatingActionButton(
-            onPressed: _requestPermissions,
-            tooltip: 'Request permissions',
-            child: Icon(Icons.perm_phone_msg),
-          ), // This trailing comma makes auto-formatting nicer for build methods.
-          FloatingActionButton(
-            onPressed: fetchCallLog,
-            tooltip: 'Get number of calls',
-            child: Icon(Icons.view_list),
-          ), // This trailing comma makes auto-formatting nicer for build methods.
-          recordingTask,
-        ],
-      );
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        FloatingActionButton(
+          onPressed: _incrementCounter,
+          tooltip: 'Increment',
+          child: Icon(Icons.add),
+        ), // This trailing comma makes auto-formatting nicer for build methods.
+        FloatingActionButton(
+          onPressed: _decrementCounter,
+          tooltip: 'Decrement',
+          child: Icon(Icons.remove),
+        ), // This trailing comma makes auto-formatting nicer for build methods.
+        FloatingActionButton(
+          onPressed: _requestPermissions,
+          tooltip: 'Request permissions',
+          child: Icon(Icons.perm_phone_msg),
+        ), // This trailing comma makes auto-formatting nicer for build methods.
+        FloatingActionButton(
+          onPressed: fetchCallLog,
+          tooltip: 'Get number of calls',
+          child: Icon(Icons.view_list),
+        ), // This trailing comma makes auto-formatting nicer for build methods.
+        recordingTask,
+      ],
+    );
 
     return Scaffold(
       appBar: AppBar(
