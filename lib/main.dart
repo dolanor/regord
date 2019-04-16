@@ -7,6 +7,7 @@ import 'package:audio_recorder/audio_recorder.dart';
 import 'package:permission_handler/permission_handler.dart' as perm;
 
 import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart';
 import 'package:sprintf/sprintf.dart';
 
 void main() => runApp(MyApp());
@@ -52,9 +53,9 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-Future<Directory> _getAppDir()  async {
+Future<Directory> _getAppDir() async {
   print("getAppDir");
-  Directory dp =  await getExternalStorageDirectory();
+  Directory dp = await getExternalStorageDirectory();
 
   print("getAppDir: " + dp.path);
   Directory d = Directory(dp.path + "/Android/data/com.tuxago.regord/audio");
@@ -67,6 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String _error = "";
   final PhoneLog phoneLog = new PhoneLog();
   Iterable<CallRecord> _callRecords;
+  List<FileSystemEntity> _audioTaskFiles;
   bool _isRecording = false;
 
   void _requestPermissions() async {
@@ -153,10 +155,14 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     Recording recording = await AudioRecorder.stop();
-    print(
-        "path: ${recording.path}, format: ${recording.audioOutputFormat}, duration: ${recording.duration}, extension: ${recording.extension}");
+    print( "path: ${recording.path}, format: ${recording.audioOutputFormat}, duration: ${recording.duration}, extension: ${recording.extension}");
+
+    Directory d = await _getAppDir();
+    List<FileSystemEntity> files = await d.list(recursive: false, followLinks: false).toList();
+
     setState(() {
       _isRecording = false;
+      _audioTaskFiles = files;
     });
   }
 
@@ -218,6 +224,23 @@ class _MyHomePageState extends State<MyHomePage> {
       ]);
     }
 
+    for (FileSystemEntity f in _audioTaskFiles ?? <FileSystemEntity>[]) {
+      children.addAll(<Widget>[
+        new Container(
+          height: 16.0,
+        ),
+        new Row(
+          children: <Widget>[
+            new Padding(
+              child: new Text(basename(f.path)),
+              padding: const EdgeInsets.only(left: 8.0),
+            ),
+          ],
+          crossAxisAlignment: CrossAxisAlignment.center,
+        )
+      ]);
+    }
+
     FloatingActionButton recordingTask;
     if (_isRecording) {
       recordingTask = FloatingActionButton(
@@ -232,6 +255,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Icon(Icons.mic),
       );
     }
+
     Widget floatingActionButton = Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
