@@ -5,6 +5,7 @@ import 'package:phone_log/phone_log.dart';
 
 import 'package:audio_recorder/audio_recorder.dart';
 import 'package:permission_handler/permission_handler.dart' as perm;
+import 'package:open_file/open_file.dart';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
@@ -155,10 +156,12 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     Recording recording = await AudioRecorder.stop();
-    print( "path: ${recording.path}, format: ${recording.audioOutputFormat}, duration: ${recording.duration}, extension: ${recording.extension}");
+    print(
+        "path: ${recording.path}, format: ${recording.audioOutputFormat}, duration: ${recording.duration}, extension: ${recording.extension}");
 
     Directory d = await _getAppDir();
-    List<FileSystemEntity> files = await d.list(recursive: false, followLinks: false).toList();
+    List<FileSystemEntity> files =
+        await d.list(recursive: false, followLinks: false).toList();
 
     setState(() {
       _isRecording = false;
@@ -231,8 +234,12 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         new Row(
           children: <Widget>[
-            new Padding(
-              child: new Text(basename(f.path)),
+            FlatButton(
+              onPressed: () => _playMedia(f.path),
+              child: Icon(Icons.play_circle_filled),
+            ),
+            Padding(
+              child: Text(basename(f.path)),
               padding: const EdgeInsets.only(left: 8.0),
             ),
           ],
@@ -313,4 +320,8 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: floatingActionButton,
     );
   }
+}
+
+void _playMedia(String filepath) async {
+  await OpenFile.open(filepath);
 }
