@@ -52,12 +52,14 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-Future<String> _getAppDir() async {
+Future<Directory> _getAppDir()  async {
   print("getAppDir");
-  Directory dp = await getExternalStorageDirectory();
+  Directory dp =  await getExternalStorageDirectory();
 
   print("getAppDir: " + dp.path);
-  return dp.path + "/Android/data/com.tuxago.regord/audio";
+  Directory d = Directory(dp.path + "/Android/data/com.tuxago.regord/audio");
+  await d.create(recursive: true);
+  return d;
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -126,15 +128,14 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    String _appDirPath = await _getAppDir();
-    await new Directory(_appDirPath).create(recursive: true);
+    Directory _appDir = await _getAppDir();
 
     setState(() {
       _isRecording = true;
     });
 
     await AudioRecorder.start(
-        path: _appDirPath + "/" + datePrefix() + "task.m4a",
+        path: _appDir.path + "/" + datePrefix() + "task.m4a",
         audioOutputFormat: AudioOutputFormat.AAC);
   }
 
