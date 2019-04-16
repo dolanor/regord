@@ -7,6 +7,7 @@ import 'package:audio_recorder/audio_recorder.dart';
 import 'package:permission_handler/permission_handler.dart' as perm;
 
 import 'package:path_provider/path_provider.dart';
+import 'package:sprintf/sprintf.dart';
 
 void main() => runApp(MyApp());
 
@@ -120,10 +121,14 @@ class _MyHomePageState extends State<MyHomePage> {
     await new Directory(dirPath).create(recursive: true);
 
     await AudioRecorder.start(
-            //TODO create random file names
-        path: dirPath + "/audio.aac",
+        path: dirPath + "/" + datePrefix() + "task.m4a",
         audioOutputFormat: AudioOutputFormat.AAC);
 
+  }
+
+  String datePrefix() {
+      DateTime now = DateTime.now();
+      return sprintf("%02d-%02d-%02dT%02d-%02d-%02d_", [now.year, now.month, now.day, now.hour, now.minute, now.second]);
   }
 
   void stopRecordTask() async{
