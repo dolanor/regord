@@ -137,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
     await AudioRecorder.start(
-        path: _appDir.path + "/" + datePrefix() + "task.m4a",
+        path: _appDir.path + "/" + datePrefix() + "task.mp4",
         audioOutputFormat: AudioOutputFormat.AAC);
   }
 
