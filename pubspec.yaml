@@ -24,7 +24,9 @@ dependencies:
       url: git://github.com/tuxago/flutter.plugins.git
       path: packages/phone_log
       ref: v1.0.0
-  audio_recorder: ^0.0.6
+  audio_recorder2:
+    git:
+      url: git://github.com/Apurv2017/audioRecorder2
   permission_handler: ^3.0.0
   path_provider:
   sprintf: ^4.0.0

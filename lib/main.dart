@@ -8,7 +8,7 @@ import 'package:permission_handler/permission_handler.dart' as perm;
 import 'package:open_file/open_file.dart';
 
 import 'package:phone_log/phone_log.dart';
-import 'package:audio_recorder/audio_recorder.dart';
+import 'package:audio_recorder2/audio_recorder2.dart';
 
 void main() => runApp(MyApp());
 
@@ -124,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void recordTask() async {
-    bool hasPermissions = await AudioRecorder.hasPermissions;
+    bool hasPermissions = await AudioRecorder2.hasPermissions;
 
     if (!hasPermissions) {
       return;
@@ -136,7 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _isRecording = true;
     });
 
-    await AudioRecorder.start(
+    await AudioRecorder2.start(
         path: _appDir.path + "/" + datePrefix() + "task.mp4",
         audioOutputFormat: AudioOutputFormat.AAC);
   }
@@ -148,13 +148,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void stopRecordTask() async {
-    bool hasPermissions = await AudioRecorder.hasPermissions;
+    bool hasPermissions = await AudioRecorder2.hasPermissions;
 
     if (!hasPermissions) {
       return;
     }
 
-    Recording recording = await AudioRecorder.stop();
+    Recording recording = await AudioRecorder2.stop();
     print(
         "path: ${recording.path}, format: ${recording.audioOutputFormat}, duration: ${recording.duration}, extension: ${recording.extension}");
 
